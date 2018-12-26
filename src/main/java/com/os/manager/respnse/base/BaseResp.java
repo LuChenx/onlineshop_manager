@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 请求返回通用
- *
- * <p>Title: BaseResp.java</p> <p>Description: BaseResp.java</p> <p>Copyright:
- * Copyright (c) 2018</p> <p>Company: FPI </p>
- * @author luchenxi
- * @version 1.0
- * @creattime 2018年12月26日 下午1:53:52
+ * 
+ * @ClassName: BaseResp
+ * @Description:TODO(请求返回通用)
+ * @author: 陆晨曦
+ * @date: 2018年12月26日 下午11:44:46
+ * 
+ * @Copyright: 2018 luchenxi. All rights reserved.
+ *             注意：本内容仅限于陆晨曦以及授权组织使用，禁止外泄以及用于其他的商业目
  */
 @ Data
 @ NoArgsConstructor
