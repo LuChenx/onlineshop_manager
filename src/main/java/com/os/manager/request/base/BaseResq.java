@@ -30,4 +30,7 @@ public class BaseResq
 	@ NotBlank (message = "无效请求来源！")
 	@ Pattern (regexp = "^1|2$" ,message = "无效请求来源！")
 	String appId;
+	@ NotBlank (message = "非法请求！")
+	@ Pattern (regexp = "^password@123$" ,message = "非法请求！")
+	String appKey;
 }
