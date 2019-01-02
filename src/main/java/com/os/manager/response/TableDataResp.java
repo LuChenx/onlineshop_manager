@@ -2,7 +2,7 @@
 package com.os.manager.response;
 
 import com.alibaba.fastjson.JSONArray;
-import com.os.manager.respnse.base.BaseResp;
+import com.os.manager.response.base.BaseResp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

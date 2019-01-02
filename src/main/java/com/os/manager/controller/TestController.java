@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.redis.RedisClient;
-import com.os.manager.respnse.base.ReturnCode;
 import com.os.manager.response.TestResp;
+import com.os.manager.response.base.ReturnCode;
 
 /**
  * 
