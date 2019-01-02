@@ -28,8 +28,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
-import com.os.manager.respnse.base.BaseResp;
-import com.os.manager.respnse.base.ReturnCode;
+import com.os.manager.response.base.BaseResp;
+import com.os.manager.response.base.ReturnCode;
 
 /**
  * 
