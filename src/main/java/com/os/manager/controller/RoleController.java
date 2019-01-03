@@ -1,6 +1,8 @@
 
 package com.os.manager.controller;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -9,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.os.manager.aspect.ControllerLogger;
+import com.os.manager.request.AddRoleRequest;
+import com.os.manager.request.DeleteRoleRequest;
 import com.os.manager.request.base.BaseResq;
+import com.os.manager.response.BaseAuthResp;
 import com.os.manager.response.TableDataResp;
+import com.os.manager.response.base.BaseResp;
+import com.os.manager.response.base.ReturnCode;
 import com.os.manager.service.RoleService;
 
 /**
@@ -27,8 +34,9 @@ import com.os.manager.service.RoleService;
 @ RequestMapping (value = "/system/role")
 public class RoleController
 {
+	private Logger logger = LogManager.getLogger(RoleController.class);
 	@ Autowired
-	RoleService roleService;
+	RoleService    roleService;
 
 	/**
 	 * 
@@ -41,5 +49,79 @@ public class RoleController
 	public TableDataResp roleConfig(@ Validated @ RequestBody BaseResq request , BindingResult result)
 	{
 		return roleService.queryAllRoles();
+	}
+
+	/**
+	 * 
+	 * @Title: authConfig @Description: TODO(查询已有的岗位权限配置) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseAuthResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/authConfig")
+	public BaseAuthResp authConfig(@ Validated @ RequestBody BaseResq request , BindingResult result)
+	{
+		return roleService.queryAuthConfig();
+	}
+
+	/**
+	 * 
+	 * @Title: priceAuthConfig @Description:
+	 *         TODO(查询已有的岗位权限配置) @param: @param request @param: @param
+	 *         result @param: @return @return: BaseAuthResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/priceAuthConfig")
+	public BaseAuthResp priceAuthConfig(@ Validated @ RequestBody BaseResq request , BindingResult result)
+	{
+		return roleService.queryPriceAuthConfig();
+	}
+
+	/**
+	 * 
+	 * @Title: addconifg @Description: TODO(添加岗位配置) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/addconfig")
+	public BaseResp addconifg(@ Validated @ RequestBody AddRoleRequest request , BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = roleService.addRoleConfig(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("岗位配置添加失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	/**
+	 * 
+	 * @Title: addconifg @Description: TODO(删除岗位配置) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/deleteConfig")
+	public BaseResp deleteConfig(@ Validated @ RequestBody DeleteRoleRequest request , BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = roleService.deleteRoleConfig(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("岗位配置删除失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
 	}
 }

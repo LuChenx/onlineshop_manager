@@ -150,6 +150,15 @@
     values (#{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{roleId,jdbcType=BIGINT}, #{authId,jdbcType=BIGINT})
   </insert>
+  
+  <insert id="insertList">
+    insert into sys_config_role_auth (role_id, auth_id)
+    values 
+    <foreach collection ="list" item="result" separator =",">
+         (#{result.roleId}, #{result.authId})
+    </foreach >
+  </insert>
+  
   <insert id="insertSelective" parameterType="com.os.manager.dbmodel.SysConfigRoleAuth">
     <!--
       WARNING - @mbg.generated

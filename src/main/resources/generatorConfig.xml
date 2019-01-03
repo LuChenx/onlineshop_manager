@@ -2,7 +2,7 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
 	<classPathEntry
-		location="D:\maven\repository\mysql\mysql-connector-java\5.1.47\mysql-connector-java-5.1.47.jar" />
+		location="D:\maven\mavenstore\mysql\mysql-connector-java\5.1.47\mysql-connector-java-5.1.47.jar" />
 	<context id="context1" targetRuntime="MyBatis3">
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
 			connectionURL="jdbc:mysql://47.97.221.42:3306/onlinestore?useUnicode=true&amp;characterEncoding=UTF-8"
@@ -16,10 +16,11 @@
 		<javaClientGenerator
 			targetPackage="com.os.manager.dao"
 			targetProject="onlinestore_manager\src\main\java" type="XMLMAPPER" />
-		<table schema="CL_DEMO" tableName="sys_config_auths" />
+		<!-- <table schema="CL_DEMO" tableName="sys_config_auths" />
 		<table schema="CL_DEMO" tableName="sys_config_price" />
 		<table schema="CL_DEMO" tableName="sys_config_role_auth" />
 		<table schema="CL_DEMO" tableName="sys_config_roles" />
-		<table schema="CL_DEMO" tableName="sys_manager_user" />
+		<table schema="CL_DEMO" tableName="sys_manager_user" /> -->
+		<table schema="CL_DEMO" tableName="sys_config_role_price" />
 	</context>
 </generatorConfiguration>
