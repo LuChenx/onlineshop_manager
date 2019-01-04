@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddRoleRequest;
 import com.os.manager.request.DeleteRoleRequest;
+import com.os.manager.request.RoleDetailRequest;
+import com.os.manager.request.UpdateRoleRequest;
 import com.os.manager.request.base.BaseResq;
+import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.BaseAuthResp;
+import com.os.manager.response.RoleDetailResp;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
 import com.os.manager.response.base.ReturnCode;
@@ -46,9 +50,9 @@ public class RoleController
 	 */
 	@ ControllerLogger
 	@ RequestMapping ("/conifg")
-	public TableDataResp roleConfig(@ Validated @ RequestBody BaseResq request , BindingResult result)
+	public TableDataResp roleConfig(@ Validated @ RequestBody BaseTableRequest request , BindingResult result)
 	{
-		return roleService.queryAllRoles();
+		return roleService.queryAllRoles(request);
 	}
 
 	/**
@@ -103,6 +107,30 @@ public class RoleController
 
 	/**
 	 * 
+	 * @Title: updateConfig @Description: TODO(修改岗位配置) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateConfig")
+	public BaseResp updateConfig(@ Validated @ RequestBody UpdateRoleRequest request , BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = roleService.updateRoleConfig(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("岗位配置修改失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	/**
+	 * 
 	 * @Title: addconifg @Description: TODO(删除岗位配置) @param: @param
 	 *         request @param: @param result @param: @return @return:
 	 *         BaseResp @throws
@@ -123,5 +151,31 @@ public class RoleController
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}
 		return resp;
+	}
+
+	/**
+	 * 
+	 * @Title: configDetail @Description: TODO(岗位详情查询) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         RoleDetailResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/configDetail")
+	public RoleDetailResp configDetail(@ Validated @ RequestBody RoleDetailRequest request , BindingResult result)
+	{
+		return roleService.queryRoleDetail(request);
+	}
+
+	/**
+	 * 
+	 * @Title: roleAuthConfig @Description: TODO(查询已有的岗位权限配置) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         TableDataResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/roleAuthConfig")
+	public TableDataResp roleAuthConfig(@ Validated @ RequestBody BaseTableRequest request , BindingResult result)
+	{
+		return roleService.queryRoleAuthConfig(request);
 	}
 }

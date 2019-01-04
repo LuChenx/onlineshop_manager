@@ -3,7 +3,11 @@ package com.os.manager.service;
 
 import com.os.manager.request.AddRoleRequest;
 import com.os.manager.request.DeleteRoleRequest;
+import com.os.manager.request.RoleDetailRequest;
+import com.os.manager.request.UpdateRoleRequest;
+import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.BaseAuthResp;
+import com.os.manager.response.RoleDetailResp;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
 
@@ -25,7 +29,15 @@ public interface RoleService
 	 *         TODO(查询已有的岗位配置) @param: @return @return:
 	 *         TableDataResp @throws
 	 */
-	TableDataResp queryAllRoles();
+	TableDataResp queryAllRoles(BaseTableRequest request);
+
+	/**
+	 * 
+	 * @Title: queryAllRoles @Description:
+	 *         TODO(查询已有的岗位权限配置) @param: @return @return:
+	 *         TableDataResp @throws
+	 */
+	TableDataResp queryRoleAuthConfig(BaseTableRequest request);
 
 	/**
 	 * 
@@ -45,15 +57,29 @@ public interface RoleService
 
 	/**
 	 * 
-	 * @Title: queryPriceAuthConfig @Description:
+	 * @Title: addRoleConfig @Description:
 	 *         TODO(添加岗位配置) @param: @return @return: BaseAuthResp @throws
 	 */
 	BaseResp addRoleConfig(AddRoleRequest request);
 
 	/**
 	 * 
-	 * @Title: queryPriceAuthConfig @Description:
+	 * @Title: updateRoleConfig @Description:
+	 *         TODO(修改岗位配置) @param: @return @return: BaseAuthResp @throws
+	 */
+	BaseResp updateRoleConfig(UpdateRoleRequest request);
+
+	/**
+	 * 
+	 * @Title: deleteRoleConfig @Description:
 	 *         TODO(删除岗位配置) @param: @return @return: BaseAuthResp @throws
 	 */
 	BaseResp deleteRoleConfig(DeleteRoleRequest request);
+
+	/**
+	 * 
+	 * @Title: queryRoleDetail @Description:
+	 *         TODO(岗位详情) @param: @return @return: BaseAuthResp @throws
+	 */
+	RoleDetailResp queryRoleDetail(RoleDetailRequest request);
 }

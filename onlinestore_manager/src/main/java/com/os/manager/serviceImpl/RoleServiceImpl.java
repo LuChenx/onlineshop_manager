@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.os.manager.dao.SysConfigAuthsMapper;
 import com.os.manager.dao.SysConfigPriceMapper;
 import com.os.manager.dao.SysConfigRoleAuthMapper;
@@ -30,7 +32,11 @@ import com.os.manager.dbmodel.SysConfigRolesExample;
 import com.os.manager.model.Node;
 import com.os.manager.request.AddRoleRequest;
 import com.os.manager.request.DeleteRoleRequest;
+import com.os.manager.request.RoleDetailRequest;
+import com.os.manager.request.UpdateRoleRequest;
+import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.BaseAuthResp;
+import com.os.manager.response.RoleDetailResp;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
 import com.os.manager.response.base.ReturnCode;
@@ -69,12 +75,14 @@ public class RoleServiceImpl implements RoleService
 	 * @see com.os.manager.service.RoleService#queryAllRoles()
 	 */
 	@ Override
-	public TableDataResp queryAllRoles()
+	public TableDataResp queryAllRoles(BaseTableRequest request)
 	{
 		TableDataResp resp = new TableDataResp();
 		try
 		{
-			List<SysConfigRoles> roles = sysConfigRolesMapper.selectByExample(new SysConfigRolesExample());
+			SysConfigRolesExample example = new SysConfigRolesExample();
+			example.setOrderByClause("role_name " + request.getSortOrder());
+			List<SysConfigRoles> roles = sysConfigRolesMapper.selectByExample(example);
 			if(CollectionUtils.isNotEmpty(roles))
 			{
 				resp.setRows(JsonArrayUtils.conver(roles));
@@ -210,6 +218,142 @@ public class RoleServiceImpl implements RoleService
 		sysConfigRolePriceMapper.deleteByExample(example2);
 		resp.setRcode(ReturnCode.CODE_000000);
 		resp.setRmsg(ReturnCode.INFO_000000);
+		return resp;
+	}
+
+	@ Override
+	public RoleDetailResp queryRoleDetail(RoleDetailRequest request)
+	{
+		RoleDetailResp resp = new RoleDetailResp();
+		try
+		{
+			//基本信息
+			SysConfigRoles baseConfig = sysConfigRolesMapper.selectByPrimaryKey(request.getRoleId());
+			resp.setRoleId(request.getRoleId());
+			resp.setRoleName(baseConfig.getRoleName());
+			resp.setRoleDesc(baseConfig.getRoleDesc());
+			//岗位权限信息
+			SysConfigRoleAuthExample example = new SysConfigRoleAuthExample();
+			Criteria criteria = example.createCriteria();
+			criteria.andRoleIdEqualTo(request.getRoleId());
+			List<SysConfigRoleAuth> auths = sysConfigRoleAuthMapper.selectByExample(example);
+			List<Long> authIds = new ArrayList<>();
+			auths.forEach(auth -> {
+				authIds.add(auth.getAuthId());
+			});
+			resp.setAuthIds(authIds);
+			//岗位价格权限信息
+			SysConfigRolePriceExample example2 = new SysConfigRolePriceExample();
+			com.os.manager.dbmodel.SysConfigRolePriceExample.Criteria criteria2 = example2.createCriteria();
+			criteria2.andRoleIdEqualTo(request.getRoleId());
+			List<SysConfigRolePrice> prices = sysConfigRolePriceMapper.selectByExample(example2);
+			List<Long> priceAuthIds = new ArrayList<>();
+			prices.forEach(auth -> {
+				priceAuthIds.add(auth.getPriceId());
+			});
+			resp.setPriceAuthIds(priceAuthIds);
+			resp.setRoleId(request.getRoleId());
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("岗位配置查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	@ Transactional
+	public BaseResp updateRoleConfig(UpdateRoleRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		//修改基本信息
+		SysConfigRoles record = new SysConfigRoles();
+		record.setId(request.getRoleId());
+		record.setRoleDesc(request.getRoleDesc());
+		record.setRoleName(request.getRoleName());
+		sysConfigRolesMapper.updateByPrimaryKey(record);
+		//修改岗位权限信息
+		//删除岗位权限配置信息
+		SysConfigRoleAuthExample example = new SysConfigRoleAuthExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andRoleIdEqualTo(request.getRoleId());
+		sysConfigRoleAuthMapper.deleteByExample(example);
+		//添加新配置信息
+		String auth = request.getAuth();
+		String[] authArr = auth.split(",");
+		List<SysConfigRoleAuth> configs = new ArrayList<>();
+		for(int i = 0 ; i < authArr.length ; i++)
+		{
+			SysConfigRoleAuth config = new SysConfigRoleAuth();
+			config.setAuthId(Long.valueOf(authArr[i]));
+			config.setRoleId(record.getId());
+			configs.add(config);
+		}
+		sysConfigRoleAuthMapper.insertList(configs);
+		//修改价格权限信息
+		//删除岗位价格权限配置信息
+		SysConfigRolePriceExample example2 = new SysConfigRolePriceExample();
+		com.os.manager.dbmodel.SysConfigRolePriceExample.Criteria criteria2 = example2.createCriteria();
+		criteria2.andRoleIdEqualTo(request.getRoleId());
+		sysConfigRolePriceMapper.deleteByExample(example2);
+		//添加新配置价格权限信息
+		String priceAuth = request.getPriceAuth();
+		String[] priceAuthArr = priceAuth.split(",");
+		List<SysConfigRolePrice> priceConfigs = new ArrayList<>();
+		for(int i = 0 ; i < priceAuthArr.length ; i++)
+		{
+			SysConfigRolePrice config = new SysConfigRolePrice();
+			config.setPriceId(Long.valueOf(priceAuthArr[i]));
+			config.setRoleId(record.getId());
+			priceConfigs.add(config);
+		}
+		sysConfigRolePriceMapper.insertList(priceConfigs);
+		resp.setRcode(ReturnCode.CODE_000000);
+		resp.setRmsg(ReturnCode.INFO_000000);
+		return resp;
+	}
+
+	@ Override
+	public TableDataResp queryRoleAuthConfig(BaseTableRequest request)
+	{
+		TableDataResp resp = new TableDataResp();
+		try
+		{
+			//查询所有角色的权限配置
+			List<SysConfigRoleAuth> roleAuths = sysConfigRoleAuthMapper
+				.selectByExample(new SysConfigRoleAuthExample());
+			//查询所有权限
+			SysConfigAuthsExample example = new SysConfigAuthsExample();
+			example.setOrderByClause("auth_name " + request.getSortOrder());
+			List<SysConfigAuths> auths = sysConfigAuthsMapper.selectByExample(example);
+			resp.setTotal(auths.size());
+			JSONArray datas = new JSONArray();
+			auths.forEach(auth -> {
+				JSONObject row = new JSONObject();
+				row.put("authName", auth.getAuthName());
+				row.put("authDesc", auth.getAuthDesc());
+				roleAuths.forEach(ra -> {
+					if(auth.getId() == ra.getAuthId())
+					{
+						row.put(String.valueOf(ra.getRoleId()), true);
+					}
+				});
+				datas.add(row);
+			});
+			resp.setRows(datas);
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("岗位权限配置查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
 		return resp;
 	}
 }
