@@ -277,8 +277,8 @@
       This element was generated on Sun Dec 30 20:58:22 CST 2018.
     -->
     update sys_config_roles
-    set create_time = #{createTime,jdbcType=TIMESTAMP},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+    set
+      modified_time = NOW(),
       role_name = #{roleName,jdbcType=VARCHAR},
       role_desc = #{roleDesc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
