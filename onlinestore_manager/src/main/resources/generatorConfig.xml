@@ -25,5 +25,6 @@
 		<!-- <table schema="CL_DEMO" tableName="sys_config_brand" />
 		<table schema="CL_DEMO" tableName="sys_config_area" />
 		<table schema="CL_DEMO" tableName="sys_config_repertory" /> -->
+		<table schema="CL_DEMO" tableName="sys_manager_user" />
 	</context>
 </generatorConfiguration>
