@@ -1,8 +1,13 @@
 
 package com.os.manager.service;
 
+import com.os.manager.request.AddUserRequest;
+import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.UserAuthRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
+import com.os.manager.response.UserAuthListResp;
+import com.os.manager.response.base.BaseResp;
 
 /**
  * 
@@ -22,4 +27,25 @@ public interface UserService
 	 *         request @param: @return @return: TableDataResp @throws
 	 */
 	TableDataResp queryUserList(UserListRequest request);
+
+	/**
+	 * 
+	 * @Title: addUser @Description: TODO(添加用户) @param: @param
+	 *         request @param: @return @return: BaseResp @throws
+	 */
+	BaseResp addUser(AddUserRequest request);
+
+	/**
+	 * 
+	 * @Title: deleteUser @Description: TODO(删除用户) @param: @param
+	 *         request @param: @return @return: BaseResp @throws
+	 */
+	BaseResp deleteUser(DeleteUserRequest request);
+
+	/**
+	 * 
+	 * @Title: queryUserAuthList @Description: TODO(用户权限列表) @param: @param
+	 *         request @param: @return @return: UserAuthListResp @throws
+	 */
+	UserAuthListResp queryUserAuthList(UserAuthRequest request);
 }

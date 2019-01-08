@@ -11,8 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.os.manager.aspect.ControllerLogger;
+import com.os.manager.request.AddUserRequest;
+import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.UserAuthRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
+import com.os.manager.response.UserAuthListResp;
+import com.os.manager.response.base.BaseResp;
+import com.os.manager.response.base.ReturnCode;
 import com.os.manager.service.UserService;
 
 /**
@@ -44,5 +50,66 @@ public class UserController
 	public TableDataResp list(@ Validated @ RequestBody UserListRequest request , BindingResult result)
 	{
 		return userService.queryUserList(request);
+	}
+
+	/**
+	 * 
+	 * @Title: addUser @Description: TODO(添加操作员) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/addUser")
+	public BaseResp addUser(@ Validated @ RequestBody AddUserRequest request , BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = userService.addUser(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("操作员添加失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	/**
+	 * 
+	 * @Title: deleteUser @Description: TODO(删除操作员) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/deleteUser")
+	public BaseResp deleteUser(@ Validated @ RequestBody DeleteUserRequest request , BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = userService.deleteUser(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("操作员添加失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	/**
+	 * 
+	 * @Title: authList @Description: TODO(删除操作员) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         UserAuthListResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/authList")
+	public UserAuthListResp authList(@ Validated @ RequestBody UserAuthRequest request , BindingResult result)
+	{
+		return userService.queryUserAuthList(request);
 	}
 }
