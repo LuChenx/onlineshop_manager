@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
@@ -111,5 +112,29 @@ public class UserController
 	public UserAuthListResp authList(@ Validated @ RequestBody UserAuthRequest request , BindingResult result)
 	{
 		return userService.queryUserAuthList(request);
+	}
+
+	/**
+	 * 
+	 * @Title: updateUser @Description: TODO(更新操作员) @param: @param
+	 * request @param: @param result @param: @return @return:
+	 * BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateUser")
+	public BaseResp updateUser(@ Validated @ RequestBody UpdateUserRequest request , BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = userService.updateUser(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("操作员更新失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
 	}
 }

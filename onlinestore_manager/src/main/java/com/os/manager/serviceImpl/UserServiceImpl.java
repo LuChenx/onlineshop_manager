@@ -35,6 +35,7 @@ import com.os.manager.dbmodel.SysManagerUserRole;
 import com.os.manager.dbmodel.SysManagerUserRoleExample;
 import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
@@ -278,6 +279,133 @@ public class UserServiceImpl implements UserService
 			resp.setRcode(ReturnCode.CODE_199999);
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}
+		return resp;
+	}
+
+	@ Override
+	@ Transactional
+	public BaseResp updateUser(UpdateUserRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		//更新基本信息
+		SysManagerUser record = new SysManagerUser();
+		record.setId(request.getUserId());
+		record.setAccountName(request.getAccount());
+		record.setUserName(request.getUserName());
+		record.setUserPhone(request.getUserPhone());
+		record.setPassword(request.getPassword());
+		record.setStatus(request.getStatus());
+		record.setAreaStatus(request.getAreaStatus());
+		record.setRepertoryStatus(request.getRepertoryStatus());
+		record.setBrandStatus(request.getBrandStatus());
+		//配置岗位信息
+		String auth = request.getAuth();
+		//查询岗位价格权限
+		long priceAuthNum = sysConfigPriceMapper.countByExample(new SysConfigPriceExample());
+		String[] roleArr = auth.split(",");
+		List<SysManagerUserRole> roles = new ArrayList<>();
+		for(int i = 0 ; i < roleArr.length ; i++)
+		{
+			if(StringUtils.isNotEmpty(roleArr[i]))
+			{
+				SysConfigRolePriceExample example = new SysConfigRolePriceExample();
+				com.os.manager.dbmodel.SysConfigRolePriceExample.Criteria criteria = example
+					.createCriteria();
+				criteria.andRoleIdEqualTo(Long.valueOf(roleArr[i]));
+				long rolePrice = sysConfigRolePriceMapper.countByExample(example);
+				if(rolePrice == priceAuthNum)
+				{
+					//如果有所有价格权限
+					record.setPriceStatus(true);
+				}
+				SysManagerUserRole role = new SysManagerUserRole();
+				role.setRoleId(Long.valueOf(roleArr[i]));
+				role.setManagerId(record.getId());
+				roles.add(role);
+			}
+		}
+		if(record.getPriceStatus() == null)
+		{
+			record.setPriceStatus(false);
+		}
+		sysManagerUserMapper.updateByPrimaryKey(record);
+		//更新用户角色配置
+		SysManagerUserRoleExample userRoleExample = new SysManagerUserRoleExample();
+		com.os.manager.dbmodel.SysManagerUserRoleExample.Criteria criteria = userRoleExample.createCriteria();
+		criteria.andManagerIdEqualTo(request.getUserId());
+		sysManagerUserRoleMapper.deleteByExample(userRoleExample);
+		sysManagerUserRoleMapper.insertList(roles);
+		//删除用户区域权限配置
+		SysManagerUserAreaExample userAreaExample = new SysManagerUserAreaExample();
+		com.os.manager.dbmodel.SysManagerUserAreaExample.Criteria criteria2 = userAreaExample.createCriteria();
+		criteria2.andManagerIdEqualTo(request.getUserId());
+		sysManagerUserAreaMapper.deleteByExample(userAreaExample);
+		//删除用户仓库权限配置
+		SysManagerUserRepertoryExample userRepertoryExample = new SysManagerUserRepertoryExample();
+		com.os.manager.dbmodel.SysManagerUserRepertoryExample.Criteria criteria3 = userRepertoryExample
+			.createCriteria();
+		criteria3.andManagerIdEqualTo(request.getUserId());
+		sysManagerUserRepertoryMapper.deleteByExample(userRepertoryExample);
+		//删除用户品牌权限配置
+		SysManagerUserBrandExample userBrandExample = new SysManagerUserBrandExample();
+		com.os.manager.dbmodel.SysManagerUserBrandExample.Criteria criteria4 = userBrandExample
+			.createCriteria();
+		criteria4.andManagerIdEqualTo(request.getUserId());
+		sysManagerUserBrandMapper.deleteByExample(userBrandExample);
+		//添加新权限
+		//保存区域权限
+		if(StringUtils.isNotEmpty(request.getAreaAuth()))
+		{
+			List<SysManagerUserArea> areas = new ArrayList<>();
+			String[] areaIds = request.getAreaAuth().split(",");
+			for(int i = 0 ; i < areaIds.length ; i++)
+			{
+				if(StringUtils.isNotEmpty(areaIds[i]))
+				{
+					SysManagerUserArea sysManagerUserArea = new SysManagerUserArea();
+					sysManagerUserArea.setAreaId(Long.valueOf(areaIds[i]));
+					sysManagerUserArea.setManagerId(record.getId());
+					areas.add(sysManagerUserArea);
+				}
+			}
+			sysManagerUserAreaMapper.insertList(areas);
+		}
+		//保存仓库权限
+		if(StringUtils.isNotEmpty(request.getRepertoryAuth()))
+		{
+			List<SysManagerUserRepertory> repertories = new ArrayList<>();
+			String[] repertoryIds = request.getRepertoryAuth().split(",");
+			for(int i = 0 ; i < repertoryIds.length ; i++)
+			{
+				if(StringUtils.isNotEmpty(repertoryIds[i]))
+				{
+					SysManagerUserRepertory sysManagerUserRepertory = new SysManagerUserRepertory();
+					sysManagerUserRepertory.setRepertoryId(Long.valueOf(repertoryIds[i]));
+					sysManagerUserRepertory.setManagerId(record.getId());
+					repertories.add(sysManagerUserRepertory);
+				}
+			}
+			sysManagerUserRepertoryMapper.insertList(repertories);
+		}
+		//保存品牌权限
+		if(StringUtils.isNotEmpty(request.getBrandAuth()))
+		{
+			List<SysManagerUserBrand> brands = new ArrayList<>();
+			String[] brandIds = request.getBrandAuth().split(",");
+			for(int i = 0 ; i < brandIds.length ; i++)
+			{
+				if(StringUtils.isNotEmpty(brandIds[i]))
+				{
+					SysManagerUserBrand sysManagerUserBrand = new SysManagerUserBrand();
+					sysManagerUserBrand.setBrandId(Long.valueOf(brandIds[i]));
+					sysManagerUserBrand.setManagerId(record.getId());
+					brands.add(sysManagerUserBrand);
+				}
+			}
+			sysManagerUserBrandMapper.insertList(brands);
+		}
+		resp.setRcode(ReturnCode.CODE_000000);
+		resp.setRmsg(ReturnCode.INFO_000000);
 		return resp;
 	}
 }
