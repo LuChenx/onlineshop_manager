@@ -382,8 +382,8 @@
       This element was generated on Tue Jan 08 09:41:24 CST 2019.
     -->
     update sys_manager_user
-    set create_time = #{createTime,jdbcType=TIMESTAMP},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+    set 
+      modified_time = NOW(),
       user_name = #{userName,jdbcType=VARCHAR},
       account_name = #{accountName,jdbcType=VARCHAR},
       user_phone = #{userPhone,jdbcType=VARCHAR},

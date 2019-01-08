@@ -3,6 +3,7 @@ package com.os.manager.service;
 
 import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
@@ -48,4 +49,11 @@ public interface UserService
 	 *         request @param: @return @return: UserAuthListResp @throws
 	 */
 	UserAuthListResp queryUserAuthList(UserAuthRequest request);
+
+	/**
+	 * 
+	 * @Title: updateUser @Description: TODO(更新用户) @param: @param
+	 * request @param: @return @return: BaseResp @throws
+	 */
+	BaseResp updateUser(UpdateUserRequest request);
 }
