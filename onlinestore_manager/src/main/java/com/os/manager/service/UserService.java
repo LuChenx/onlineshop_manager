@@ -5,9 +5,11 @@ import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
+import com.os.manager.request.UserBaseInfoRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.UserAuthListResp;
+import com.os.manager.response.UserBaseInfoResp;
 import com.os.manager.response.base.BaseResp;
 
 /**
@@ -53,7 +55,14 @@ public interface UserService
 	/**
 	 * 
 	 * @Title: updateUser @Description: TODO(更新用户) @param: @param
-	 * request @param: @return @return: BaseResp @throws
+	 *         request @param: @return @return: BaseResp @throws
 	 */
 	BaseResp updateUser(UpdateUserRequest request);
+
+	/**
+	 * 
+	 * @Title: queryUserBaseInfo @Description: TODO(用户基本信息) @param: @param
+	 *         request @param: @return @return: UserBaseInfoResp @throws
+	 */
+	UserBaseInfoResp queryUserBaseInfo(UserBaseInfoRequest request);
 }

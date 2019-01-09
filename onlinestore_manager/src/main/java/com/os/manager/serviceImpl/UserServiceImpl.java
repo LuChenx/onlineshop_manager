@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.os.manager.dao.SysConfigPriceMapper;
+import com.os.manager.dao.SysConfigRoleAuthMapper;
 import com.os.manager.dao.SysConfigRolePriceMapper;
 import com.os.manager.dao.SysManagerUserAreaMapper;
 import com.os.manager.dao.SysManagerUserBrandMapper;
@@ -21,6 +22,8 @@ import com.os.manager.dao.SysManagerUserMapper;
 import com.os.manager.dao.SysManagerUserRepertoryMapper;
 import com.os.manager.dao.SysManagerUserRoleMapper;
 import com.os.manager.dbmodel.SysConfigPriceExample;
+import com.os.manager.dbmodel.SysConfigRoleAuth;
+import com.os.manager.dbmodel.SysConfigRoleAuthExample;
 import com.os.manager.dbmodel.SysConfigRolePriceExample;
 import com.os.manager.dbmodel.SysManagerUser;
 import com.os.manager.dbmodel.SysManagerUserArea;
@@ -37,9 +40,11 @@ import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
+import com.os.manager.request.UserBaseInfoRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.UserAuthListResp;
+import com.os.manager.response.UserBaseInfoResp;
 import com.os.manager.response.base.BaseResp;
 import com.os.manager.response.base.ReturnCode;
 import com.os.manager.service.UserService;
@@ -73,6 +78,8 @@ public class UserServiceImpl implements UserService
 	SysManagerUserRepertoryMapper sysManagerUserRepertoryMapper;
 	@ Autowired
 	SysManagerUserRoleMapper      sysManagerUserRoleMapper;
+	@ Autowired
+	SysConfigRoleAuthMapper	      sysConfigRoleAuthMapper;
 
 	@ Override
 	public TableDataResp queryUserList(UserListRequest request)
@@ -406,6 +413,53 @@ public class UserServiceImpl implements UserService
 		}
 		resp.setRcode(ReturnCode.CODE_000000);
 		resp.setRmsg(ReturnCode.INFO_000000);
+		return resp;
+	}
+
+	@ Override
+	public UserBaseInfoResp queryUserBaseInfo(UserBaseInfoRequest request)
+	{
+		UserBaseInfoResp resp = new UserBaseInfoResp();
+		try
+		{
+			SysManagerUserExample example = new SysManagerUserExample();
+			com.os.manager.dbmodel.SysManagerUserExample.Criteria criteria = example.createCriteria();
+			criteria.andAccountNameEqualTo(request.getAccount());
+			if(StringUtils.isNotEmpty(request.getValid()) && request.getValid().equals("1"))
+			{
+				criteria.andStatusEqualTo(true);
+			}
+			List<SysManagerUser> users = sysManagerUserMapper.selectByExample(example);
+			resp.setAccount(users.get(0).getAccountName());
+			resp.setPassword(users.get(0).getPassword());
+			resp.setUid(users.get(0).getPassword());
+			resp.setUserName(users.get(0).getUserName());
+			//查询用户角色
+			SysManagerUserRoleExample example2 = new SysManagerUserRoleExample();
+			com.os.manager.dbmodel.SysManagerUserRoleExample.Criteria criteria2 = example2.createCriteria();
+			criteria2.andManagerIdEqualTo(users.get(0).getId());
+			List<SysManagerUserRole> roles = sysManagerUserRoleMapper.selectByExample(example2);
+			resp.setRoles(JsonArrayUtils.conver(roles));
+			//查询用户角色权限
+			List<SysConfigRoleAuth> allRoleAuths = new ArrayList<>();
+			roles.forEach(role -> {
+				SysConfigRoleAuthExample example3 = new SysConfigRoleAuthExample();
+				com.os.manager.dbmodel.SysConfigRoleAuthExample.Criteria criteria3 = example3
+					.createCriteria();
+				criteria3.andRoleIdEqualTo(role.getRoleId());
+				List<SysConfigRoleAuth> roleAuths = sysConfigRoleAuthMapper.selectByExample(example3);
+				allRoleAuths.addAll(roleAuths);
+			});
+			resp.setAuths(JsonArrayUtils.conver(allRoleAuths));
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("用户基本信息查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
 		return resp;
 	}
 }

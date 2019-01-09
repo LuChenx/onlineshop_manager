@@ -1,6 +1,8 @@
 
 package com.os.manager.request;
 
+import com.os.manager.request.base.BaseResq;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @ Data
 @ NoArgsConstructor
 @ AllArgsConstructor
-public class UpdateAreaRequest
+public class UpdateAreaRequest extends BaseResq
 {
 	long   areaId;
 	String areaName;

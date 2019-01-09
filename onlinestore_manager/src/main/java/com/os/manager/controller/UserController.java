@@ -15,9 +15,11 @@ import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
+import com.os.manager.request.UserBaseInfoRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.UserAuthListResp;
+import com.os.manager.response.UserBaseInfoResp;
 import com.os.manager.response.base.BaseResp;
 import com.os.manager.response.base.ReturnCode;
 import com.os.manager.service.UserService;
@@ -117,8 +119,8 @@ public class UserController
 	/**
 	 * 
 	 * @Title: updateUser @Description: TODO(更新操作员) @param: @param
-	 * request @param: @param result @param: @return @return:
-	 * BaseResp @throws
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
 	 */
 	@ ControllerLogger
 	@ RequestMapping ("/updateUser")
@@ -136,5 +138,18 @@ public class UserController
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}
 		return resp;
+	}
+
+	/**
+	 * 
+	 * @Title: baseinfo @Description: TODO(操作员基本信息) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         UserBaseInfoResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/baseinfo")
+	public UserBaseInfoResp baseinfo(@ Validated @ RequestBody UserBaseInfoRequest request , BindingResult result)
+	{
+		return userService.queryUserBaseInfo(request);
 	}
 }
