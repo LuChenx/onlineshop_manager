@@ -16,10 +16,12 @@ import com.os.manager.dbmodel.SysConfigSettingOptionExample;
 import com.os.manager.dbmodel.SysConfigSettingOptionExample.Criteria;
 import com.os.manager.dbmodel.SysConfigSettingType;
 import com.os.manager.dbmodel.SysConfigSettingTypeExample;
+import com.os.manager.request.AddSystemOptionRequest;
 import com.os.manager.request.SystemOptionRequest;
 import com.os.manager.request.base.BaseResq;
 import com.os.manager.response.SystemOptionTypeResp;
 import com.os.manager.response.TableDataResp;
+import com.os.manager.response.base.BaseResp;
 import com.os.manager.response.base.ReturnCode;
 import com.os.manager.service.SystemConfigService;
 import com.os.manager.utils.JsonArrayUtils;
@@ -89,6 +91,31 @@ public class SystemConfigServiceImpl implements SystemConfigService
 		catch (Exception e)
 		{
 			logger.error("区域配置查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public BaseResp addSystemOption(AddSystemOptionRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			SysConfigSettingOption record = new SysConfigSettingOption();
+			record.setOptionDesc(request.getOptionDesc());
+			record.setOptionName(request.getOptionName());
+			record.setSettingTypeId(request.getOptionType());
+			record.setShowIndex(request.getShowIndex());
+			record.setSettingTypeName(request.getOptionTypeName());
+			sysConfigSettingOptionMapper.insert(record);
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("系统配置添加失败！", e);
 			resp.setRcode(ReturnCode.CODE_199999);
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}
