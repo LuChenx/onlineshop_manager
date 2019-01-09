@@ -1,10 +1,12 @@
 
 package com.os.manager.service;
 
+import com.os.manager.request.AddSystemOptionRequest;
 import com.os.manager.request.SystemOptionRequest;
 import com.os.manager.request.base.BaseResq;
 import com.os.manager.response.SystemOptionTypeResp;
 import com.os.manager.response.TableDataResp;
+import com.os.manager.response.base.BaseResp;
 
 /**
  * 
@@ -31,4 +33,11 @@ public interface SystemConfigService
 	 * @return
 	 */
 	TableDataResp querySystemOptions(SystemOptionRequest request);
+
+	/**
+	 * 添加系统选项
+	 * @param request
+	 * @return
+	 */
+	BaseResp addSystemOption(AddSystemOptionRequest request);
 }

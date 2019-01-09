@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.os.manager.aspect.ControllerLogger;
+import com.os.manager.request.AddSystemOptionRequest;
 import com.os.manager.request.SystemOptionRequest;
 import com.os.manager.request.base.BaseResq;
 import com.os.manager.response.SystemOptionTypeResp;
 import com.os.manager.response.TableDataResp;
+import com.os.manager.response.base.BaseResp;
 import com.os.manager.service.SystemConfigService;
 
 /**
@@ -59,5 +61,18 @@ public class SystemController
 	public TableDataResp options(@ Validated @ RequestBody SystemOptionRequest request , BindingResult result)
 	{
 		return systemConfigService.querySystemOptions(request);
+	}
+
+	/**
+	 * 
+	 * @Title: addSystemOption @Description: TODO(添加系统选项) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/addSystemOption")
+	public BaseResp addSystemOption(@ Validated @ RequestBody AddSystemOptionRequest request , BindingResult result)
+	{
+		return systemConfigService.addSystemOption(request);
 	}
 }
