@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddSystemOptionRequest;
+import com.os.manager.request.DeleteOptionRequest;
 import com.os.manager.request.SystemOptionRequest;
+import com.os.manager.request.UpdateSystemConfigRequest;
+import com.os.manager.request.UpdateSystemOptionRequest;
 import com.os.manager.request.base.BaseResq;
+import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.SystemOptionTypeResp;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
@@ -74,5 +78,59 @@ public class SystemController
 	public BaseResp addSystemOption(@ Validated @ RequestBody AddSystemOptionRequest request , BindingResult result)
 	{
 		return systemConfigService.addSystemOption(request);
+	}
+
+	/**
+	 * 
+	 * @Title: deleteOptionConfig @Description: TODO(删除系统选项) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/deleteOptionConfig")
+	public BaseResp deleteOptionConfig(@ Validated @ RequestBody DeleteOptionRequest request , BindingResult result)
+	{
+		return systemConfigService.deleteOptionConfig(request);
+	}
+
+	/**
+	 * 
+	 * @Title: updateOptionConfig @Description: TODO(更新系统选项) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateOptionConfig")
+	public BaseResp updateOptionConfig(@ Validated @ RequestBody UpdateSystemOptionRequest request ,
+		BindingResult result)
+	{
+		return systemConfigService.updateOptionConfig(request);
+	}
+
+	/**
+	 * 查询系统配置列表
+	 * @param request
+	 * @param result
+	 * @return
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/systemConfig")
+	public TableDataResp systemConfig(@ Validated @ RequestBody BaseTableRequest request , BindingResult result)
+	{
+		return systemConfigService.systemConfig(request);
+	}
+
+	/**
+	 * 
+	 * @Title: updateSystemConfig @Description: TODO(编辑系统配置) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateSystemConfig")
+	public BaseResp updateSystemConfig(@ Validated @ RequestBody UpdateSystemConfigRequest request ,
+		BindingResult result)
+	{
+		return systemConfigService.updateSystemConfig(request);
 	}
 }

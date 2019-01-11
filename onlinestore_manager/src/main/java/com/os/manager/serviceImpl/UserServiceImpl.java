@@ -38,9 +38,11 @@ import com.os.manager.dbmodel.SysManagerUserRole;
 import com.os.manager.dbmodel.SysManagerUserRoleExample;
 import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.UpdateUserBaseInfoRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
 import com.os.manager.request.UserBaseInfoRequest;
+import com.os.manager.request.UserInfoRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.UserAuthListResp;
@@ -432,8 +434,9 @@ public class UserServiceImpl implements UserService
 			List<SysManagerUser> users = sysManagerUserMapper.selectByExample(example);
 			resp.setAccount(users.get(0).getAccountName());
 			resp.setPassword(users.get(0).getPassword());
-			resp.setUid(users.get(0).getPassword());
+			resp.setUid(users.get(0).getId());
 			resp.setUserName(users.get(0).getUserName());
+			resp.setUserPhone(users.get(0).getUserPhone());
 			//查询用户角色
 			SysManagerUserRoleExample example2 = new SysManagerUserRoleExample();
 			com.os.manager.dbmodel.SysManagerUserRoleExample.Criteria criteria2 = example2.createCriteria();
@@ -457,6 +460,76 @@ public class UserServiceImpl implements UserService
 		catch (Exception e)
 		{
 			logger.error("用户基本信息查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public UserBaseInfoResp queryUserBaseInfoById(UserInfoRequest request)
+	{
+		UserBaseInfoResp resp = new UserBaseInfoResp();
+		try
+		{
+			SysManagerUserExample example = new SysManagerUserExample();
+			com.os.manager.dbmodel.SysManagerUserExample.Criteria criteria = example.createCriteria();
+			criteria.andIdEqualTo(request.getUserId());
+			criteria.andStatusEqualTo(true);
+			List<SysManagerUser> users = sysManagerUserMapper.selectByExample(example);
+			resp.setAccount(users.get(0).getAccountName());
+			resp.setPassword(users.get(0).getPassword());
+			resp.setUid(users.get(0).getId());
+			resp.setUserName(users.get(0).getUserName());
+			resp.setUserPhone(users.get(0).getUserPhone());
+			//查询用户角色
+			SysManagerUserRoleExample example2 = new SysManagerUserRoleExample();
+			com.os.manager.dbmodel.SysManagerUserRoleExample.Criteria criteria2 = example2.createCriteria();
+			criteria2.andManagerIdEqualTo(users.get(0).getId());
+			List<SysManagerUserRole> roles = sysManagerUserRoleMapper.selectByExample(example2);
+			resp.setRoles(JsonArrayUtils.conver(roles));
+			//查询用户角色权限
+			List<SysConfigRoleAuth> allRoleAuths = new ArrayList<>();
+			roles.forEach(role -> {
+				SysConfigRoleAuthExample example3 = new SysConfigRoleAuthExample();
+				com.os.manager.dbmodel.SysConfigRoleAuthExample.Criteria criteria3 = example3
+					.createCriteria();
+				criteria3.andRoleIdEqualTo(role.getRoleId());
+				List<SysConfigRoleAuth> roleAuths = sysConfigRoleAuthMapper.selectByExample(example3);
+				allRoleAuths.addAll(roleAuths);
+			});
+			resp.setAuths(JsonArrayUtils.conver(allRoleAuths));
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("用户基本信息查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public BaseResp updateUserBaseInfo(UpdateUserBaseInfoRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			SysManagerUser record = new SysManagerUser();
+			record.setId(request.getUid());
+			record.setAccountName(request.getAccount());
+			record.setUserName(request.getUserName());
+			record.setUserPhone(request.getUserPhone());
+			record.setPassword(request.getPassword());
+			sysManagerUserMapper.updateBaseInfoByPrimaryKey(record);
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("用户基本信息更新失败！", e);
 			resp.setRcode(ReturnCode.CODE_199999);
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}

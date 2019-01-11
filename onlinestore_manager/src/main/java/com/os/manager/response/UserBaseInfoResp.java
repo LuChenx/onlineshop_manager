@@ -28,6 +28,7 @@ public class UserBaseInfoResp extends BaseResp
 	String	  account;
 	String	  uid;
 	String	  userName;
+	String	  userPhone;
 	String	  password;
 	JSONArray roles;
 	JSONArray auths;

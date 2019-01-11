@@ -33,6 +33,7 @@ import com.os.manager.model.Node;
 import com.os.manager.request.AddRoleRequest;
 import com.os.manager.request.DeleteRoleRequest;
 import com.os.manager.request.RoleDetailRequest;
+import com.os.manager.request.UpdateRoleAuthRequest;
 import com.os.manager.request.UpdateRoleRequest;
 import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.BaseAuthResp;
@@ -336,6 +337,7 @@ public class RoleServiceImpl implements RoleService
 				JSONObject row = new JSONObject();
 				row.put("authName", auth.getAuthName());
 				row.put("authDesc", auth.getAuthDesc());
+				row.put("authId", auth.getId());
 				roleAuths.forEach(ra -> {
 					if(auth.getId() == ra.getAuthId())
 					{
@@ -351,6 +353,41 @@ public class RoleServiceImpl implements RoleService
 		catch (Exception e)
 		{
 			logger.error("岗位权限配置查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public BaseResp updateRoleAuth(UpdateRoleAuthRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			if(request.isType())
+			{
+				//添加
+				SysConfigRoleAuth record = new SysConfigRoleAuth();
+				record.setRoleId(request.getRoleId());
+				record.setAuthId(request.getAuthId());
+				sysConfigRoleAuthMapper.insert(record);
+			}
+			else
+			{
+				//删除
+				SysConfigRoleAuthExample example = new SysConfigRoleAuthExample();
+				Criteria criteria = example.createCriteria();
+				criteria.andAuthIdEqualTo(request.getAuthId());
+				criteria.andRoleIdEqualTo(request.getRoleId());
+				sysConfigRoleAuthMapper.deleteByExample(example);
+			}
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("岗位配置调整失败！", e);
 			resp.setRcode(ReturnCode.CODE_199999);
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}

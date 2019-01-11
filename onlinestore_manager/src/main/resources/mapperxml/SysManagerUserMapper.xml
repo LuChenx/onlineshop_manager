@@ -395,4 +395,15 @@
       password = #{password,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  
+  <update id="updateBaseInfoByPrimaryKey" parameterType="com.os.manager.dbmodel.SysManagerUser">
+    update sys_manager_user
+    set 
+      modified_time = NOW(),
+      user_name = #{userName,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
 </mapper>
