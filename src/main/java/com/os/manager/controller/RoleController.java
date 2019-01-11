@@ -14,6 +14,7 @@ import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddRoleRequest;
 import com.os.manager.request.DeleteRoleRequest;
 import com.os.manager.request.RoleDetailRequest;
+import com.os.manager.request.UpdateRoleAuthRequest;
 import com.os.manager.request.UpdateRoleRequest;
 import com.os.manager.request.base.BaseResq;
 import com.os.manager.request.base.BaseTableRequest;
@@ -177,5 +178,18 @@ public class RoleController
 	public TableDataResp roleAuthConfig(@ Validated @ RequestBody BaseTableRequest request , BindingResult result)
 	{
 		return roleService.queryRoleAuthConfig(request);
+	}
+
+	/**
+	 * 
+	 * @Title: updateRoleAuth @Description: TODO(更新角色权限) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateRoleAuth")
+	public BaseResp updateRoleAuth(@ Validated @ RequestBody UpdateRoleAuthRequest request , BindingResult result)
+	{
+		return roleService.updateRoleAuth(request);
 	}
 }

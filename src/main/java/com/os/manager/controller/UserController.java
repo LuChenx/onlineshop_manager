@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.UpdateUserBaseInfoRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
 import com.os.manager.request.UserBaseInfoRequest;
+import com.os.manager.request.UserInfoRequest;
 import com.os.manager.request.UserListRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.UserAuthListResp;
@@ -151,5 +153,43 @@ public class UserController
 	public UserBaseInfoResp baseinfo(@ Validated @ RequestBody UserBaseInfoRequest request , BindingResult result)
 	{
 		return userService.queryUserBaseInfo(request);
+	}
+
+	/**
+	 * 
+	 * @Title: baseInfo @Description: TODO(操作员基本信息 id查询) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         UserBaseInfoResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/userBaseInfo")
+	public UserBaseInfoResp baseInfo(@ Validated @ RequestBody UserInfoRequest request , BindingResult result)
+	{
+		return userService.queryUserBaseInfoById(request);
+	}
+
+	/**
+	 * 
+	 * @Title: updateUserBaseInfo @Description: TODO(添加操作员) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateUserBaseInfo")
+	public BaseResp updateUserBaseInfo(@ Validated @ RequestBody UpdateUserBaseInfoRequest request ,
+		BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = userService.updateUserBaseInfo(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("操作员修改失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
 	}
 }

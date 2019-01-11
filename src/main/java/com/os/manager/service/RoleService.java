@@ -4,6 +4,7 @@ package com.os.manager.service;
 import com.os.manager.request.AddRoleRequest;
 import com.os.manager.request.DeleteRoleRequest;
 import com.os.manager.request.RoleDetailRequest;
+import com.os.manager.request.UpdateRoleAuthRequest;
 import com.os.manager.request.UpdateRoleRequest;
 import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.BaseAuthResp;
@@ -82,4 +83,11 @@ public interface RoleService
 	 *         TODO(岗位详情) @param: @return @return: BaseAuthResp @throws
 	 */
 	RoleDetailResp queryRoleDetail(RoleDetailRequest request);
+
+	/**
+	 * 更新角色权限
+	 * @param request
+	 * @return
+	 */
+	BaseResp updateRoleAuth(UpdateRoleAuthRequest request);
 }

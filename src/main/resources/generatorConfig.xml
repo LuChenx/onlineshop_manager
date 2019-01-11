@@ -31,6 +31,8 @@
 		<table schema="CL_DEMO" tableName="sys_manager_user_area" /> -->
 		<!-- <table schema="CL_DEMO" tableName="sys_manager_user_role" /> -->
 		<!-- <table schema="CL_DEMO" tableName="sys_config_setting_type" /> -->
-		<table schema="CL_DEMO" tableName="sys_config_setting_option" />
+		<!-- <table schema="CL_DEMO" tableName="sys_config_setting_option" /> -->
+		<!-- <table schema="CL_DEMO" tableName="sys_config_setting" /> -->
+		<table schema="CL_DEMO" tableName="sys_manager_supplier" />
 	</context>
 </generatorConfiguration>
