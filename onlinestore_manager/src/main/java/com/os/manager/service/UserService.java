@@ -1,8 +1,13 @@
 
 package com.os.manager.service;
 
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.os.manager.request.AddSupplierUserRequest;
 import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.SupplierUserRequest;
 import com.os.manager.request.UpdateUserBaseInfoRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
@@ -82,4 +87,18 @@ public interface UserService
 	 * @return
 	 */
 	BaseResp updateUserBaseInfo(UpdateUserBaseInfoRequest request);
+
+	/**
+	 * 查询供货商联系人列表
+	 * @param request
+	 * @return
+	 */
+	TableDataResp querySupplierUserList(@ Validated @ RequestBody SupplierUserRequest request);
+
+	/**
+	 * 添加供货商联系人
+	 * @param request
+	 * @return
+	 */
+	BaseResp addSupplierUser(AddSupplierUserRequest request);
 }

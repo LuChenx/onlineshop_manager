@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.os.manager.dao.SysConfigPriceMapper;
 import com.os.manager.dao.SysConfigRoleAuthMapper;
 import com.os.manager.dao.SysConfigRolePriceMapper;
+import com.os.manager.dao.SysManagerSupplierUserMapper;
 import com.os.manager.dao.SysManagerUserAreaMapper;
 import com.os.manager.dao.SysManagerUserBrandMapper;
 import com.os.manager.dao.SysManagerUserMapper;
@@ -25,6 +26,8 @@ import com.os.manager.dbmodel.SysConfigPriceExample;
 import com.os.manager.dbmodel.SysConfigRoleAuth;
 import com.os.manager.dbmodel.SysConfigRoleAuthExample;
 import com.os.manager.dbmodel.SysConfigRolePriceExample;
+import com.os.manager.dbmodel.SysManagerSupplierUser;
+import com.os.manager.dbmodel.SysManagerSupplierUserExample;
 import com.os.manager.dbmodel.SysManagerUser;
 import com.os.manager.dbmodel.SysManagerUserArea;
 import com.os.manager.dbmodel.SysManagerUserAreaExample;
@@ -36,8 +39,10 @@ import com.os.manager.dbmodel.SysManagerUserRepertory;
 import com.os.manager.dbmodel.SysManagerUserRepertoryExample;
 import com.os.manager.dbmodel.SysManagerUserRole;
 import com.os.manager.dbmodel.SysManagerUserRoleExample;
+import com.os.manager.request.AddSupplierUserRequest;
 import com.os.manager.request.AddUserRequest;
 import com.os.manager.request.DeleteUserRequest;
+import com.os.manager.request.SupplierUserRequest;
 import com.os.manager.request.UpdateUserBaseInfoRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
@@ -82,6 +87,8 @@ public class UserServiceImpl implements UserService
 	SysManagerUserRoleMapper      sysManagerUserRoleMapper;
 	@ Autowired
 	SysConfigRoleAuthMapper	      sysConfigRoleAuthMapper;
+	@ Autowired
+	SysManagerSupplierUserMapper  sysManagerSupplierUserMapper;
 
 	@ Override
 	public TableDataResp queryUserList(UserListRequest request)
@@ -530,6 +537,75 @@ public class UserServiceImpl implements UserService
 		catch (Exception e)
 		{
 			logger.error("用户基本信息更新失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public TableDataResp querySupplierUserList(SupplierUserRequest request)
+	{
+		TableDataResp resp = new TableDataResp();
+		try
+		{
+			SysManagerSupplierUserExample example = new SysManagerSupplierUserExample();
+			example.setOrderByClause("user_name " + request.getSortOrder());
+			com.os.manager.dbmodel.SysManagerSupplierUserExample.Criteria criteria = example
+				.createCriteria();
+			criteria.andSupplierIdEqualTo(request.getCompanyId());
+			List<SysManagerSupplierUser> users = sysManagerSupplierUserMapper.selectByExample(example);
+			//查询操作员
+			users.forEach(sup -> {
+				SysManagerUser user = sysManagerUserMapper.selectByPrimaryKey(sup.getManagerId());
+				sup.setManagerId(user.getUserName());
+			});
+			if(CollectionUtils.isNotEmpty(users))
+			{
+				resp.setRows(JsonArrayUtils.conver(users));
+				resp.setTotal(users.size());
+			}
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("联系人配置查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public BaseResp addSupplierUser(AddSupplierUserRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			SysManagerSupplierUser record = new SysManagerSupplierUser();
+			record.setApartment(request.getApartment());
+			record.setBirthday(request.getBirthday());
+			record.setExperience(request.getExprice());
+			record.setFax(request.getUserfax());
+			record.setHobby(request.getHobby());
+			record.setManagerId(request.getUid());
+			record.setMobilePhone(request.getMobile());
+			record.setPhone(request.getUserphone());
+			record.setRole(request.getRole());
+			record.setUserDesc(request.getNote());
+			record.setUserEmail(request.getUseremail());
+			record.setUserName(request.getUserName());
+			record.setUserSex(request.getUserSex());
+			record.setWechat(request.getWechat());
+			record.setSupplierId(request.getCompanyId());
+			sysManagerSupplierUserMapper.insert(record);
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("联系人添加失败！", e);
 			resp.setRcode(ReturnCode.CODE_199999);
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}
