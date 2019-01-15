@@ -33,6 +33,7 @@
 		<!-- <table schema="CL_DEMO" tableName="sys_config_setting_type" /> -->
 		<!-- <table schema="CL_DEMO" tableName="sys_config_setting_option" /> -->
 		<!-- <table schema="CL_DEMO" tableName="sys_config_setting" /> -->
-		<table schema="CL_DEMO" tableName="sys_manager_supplier" />
+		<!-- <table schema="CL_DEMO" tableName="sys_manager_supplier" /> -->
+		<table schema="CL_DEMO" tableName="sys_manager_supplier_user" />
 	</context>
 </generatorConfiguration>

@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddSupplierRequest;
+import com.os.manager.request.AddSupplierUserRequest;
+import com.os.manager.request.SupplierUserRequest;
 import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
 import com.os.manager.service.SupplierService;
+import com.os.manager.service.UserService;
 
 /**
  * 
@@ -34,6 +37,8 @@ public class ManagerController
 	private Logger	logger = LogManager.getLogger(ManagerController.class);
 	@ Autowired
 	SupplierService	supplierService;
+	@ Autowired
+	UserService	userService;
 
 	/**
 	 * 
@@ -59,5 +64,32 @@ public class ManagerController
 	public TableDataResp supplierList(@ Validated @ RequestBody BaseTableRequest request , BindingResult result)
 	{
 		return supplierService.supplierList(request);
+	}
+
+	/**
+	 * 
+	 * @Title: supplierUserList @Description: TODO(供货商联系人列表) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         TableDataResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/supplierUserList")
+	public TableDataResp supplierUserList(@ Validated @ RequestBody SupplierUserRequest request ,
+		BindingResult result)
+	{
+		return userService.querySupplierUserList(request);
+	}
+
+	/**
+	 * 
+	 * @Title: addSupplierUser @Description: TODO(添加供货商联系人) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/addSupplierUser")
+	public BaseResp addSupplierUser(@ Validated @ RequestBody AddSupplierUserRequest request , BindingResult result)
+	{
+		return userService.addSupplierUser(request);
 	}
 }
