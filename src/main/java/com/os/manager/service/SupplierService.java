@@ -2,6 +2,9 @@
 package com.os.manager.service;
 
 import com.os.manager.request.AddSupplierRequest;
+import com.os.manager.request.DeleteSupplierRequest;
+import com.os.manager.request.UpdateSupplierRequest;
+import com.os.manager.request.UploadExcelRequest;
 import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
@@ -30,4 +33,25 @@ public interface SupplierService
 	 * @return
 	 */
 	TableDataResp supplierList(BaseTableRequest request);
+
+	/**
+	 * 删除供货商
+	 * @param request
+	 * @return
+	 */
+	BaseResp deleteSupplier(DeleteSupplierRequest request);
+
+	/**
+	 * 更新供货商
+	 * @param request
+	 * @return
+	 */
+	BaseResp updateSupplier(UpdateSupplierRequest request);
+
+	/**
+	 * 上传供货商
+	 * @param request
+	 * @return
+	 */
+	BaseResp uploadSupplier(UploadExcelRequest request);
 }

@@ -13,10 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddSupplierRequest;
 import com.os.manager.request.AddSupplierUserRequest;
+import com.os.manager.request.DeleteSupplierRequest;
+import com.os.manager.request.DeleteSupplierUserRequest;
 import com.os.manager.request.SupplierUserRequest;
+import com.os.manager.request.UpdateSupplierRequest;
+import com.os.manager.request.UpdateSupplierUserRequest;
+import com.os.manager.request.UploadExcelRequest;
 import com.os.manager.request.base.BaseTableRequest;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
+import com.os.manager.response.base.ReturnCode;
 import com.os.manager.service.SupplierService;
 import com.os.manager.service.UserService;
 
@@ -91,5 +97,83 @@ public class ManagerController
 	public BaseResp addSupplierUser(@ Validated @ RequestBody AddSupplierUserRequest request , BindingResult result)
 	{
 		return userService.addSupplierUser(request);
+	}
+
+	/**
+	 * 
+	 * @Title: deleteSupplierUser @Description:
+	 *         TODO(删除供货商联系人) @param: @param request @param: @param
+	 *         result @param: @return @return: BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/deleteSupplierUser")
+	public BaseResp deleteSupplierUser(@ Validated @ RequestBody DeleteSupplierUserRequest request ,
+		BindingResult result)
+	{
+		return userService.deleteSupplierUser(request);
+	}
+
+	/**
+	 * 
+	 * @Title: deleteSupplier @Description: TODO(删除供货商) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/deleteSupplier")
+	public BaseResp deleteSupplier(@ Validated @ RequestBody DeleteSupplierRequest request , BindingResult result)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			resp = supplierService.deleteSupplier(request);
+		}
+		catch (Exception e)
+		{
+			logger.error("供货商删除失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	/**
+	 * 
+	 * @Title: updateSupplier @Description: TODO(更新供货单位信息) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResq @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateSupplier")
+	public BaseResp updateSupplier(@ Validated @ RequestBody UpdateSupplierRequest request , BindingResult result)
+	{
+		return supplierService.updateSupplier(request);
+	}
+
+	/**
+	 * 
+	 * @Title: updateSupplierUser @Description:
+	 *         TODO(更新供货商联系人) @param: @param request @param: @param
+	 *         result @param: @return @return: BaseResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/updateSupplierUser")
+	public BaseResp updateSupplierUser(@ Validated @ RequestBody UpdateSupplierUserRequest request ,
+		BindingResult result)
+	{
+		return userService.updateSupplierUser(request);
+	}
+
+	/**
+	 * 
+	 * @Title: uploadSupplier @Description: TODO(上传供货商Excel) @param: @param
+	 *         request @param: @param result @param: @return @return:
+	 *         BaseResq @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/uploadSupplier")
+	public BaseResp uploadSupplier(@ Validated @ RequestBody UploadExcelRequest request , BindingResult result)
+	{
+		return supplierService.uploadSupplier(request);
 	}
 }

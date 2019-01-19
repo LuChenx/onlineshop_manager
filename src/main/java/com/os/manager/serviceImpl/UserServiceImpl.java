@@ -41,8 +41,10 @@ import com.os.manager.dbmodel.SysManagerUserRole;
 import com.os.manager.dbmodel.SysManagerUserRoleExample;
 import com.os.manager.request.AddSupplierUserRequest;
 import com.os.manager.request.AddUserRequest;
+import com.os.manager.request.DeleteSupplierUserRequest;
 import com.os.manager.request.DeleteUserRequest;
 import com.os.manager.request.SupplierUserRequest;
+import com.os.manager.request.UpdateSupplierUserRequest;
 import com.os.manager.request.UpdateUserBaseInfoRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
@@ -606,6 +608,60 @@ public class UserServiceImpl implements UserService
 		catch (Exception e)
 		{
 			logger.error("联系人添加失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public BaseResp deleteSupplierUser(DeleteSupplierUserRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			sysManagerSupplierUserMapper.deleteByPrimaryKey(request.getDeleteUserId());
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("删除供货商联系人！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public BaseResp updateSupplierUser(UpdateSupplierUserRequest request)
+	{
+		BaseResp resp = new BaseResp();
+		try
+		{
+			SysManagerSupplierUser record = new SysManagerSupplierUser();
+			record.setId(request.getSupplierUserId());
+			record.setApartment(request.getApartment());
+			record.setBirthday(request.getBirthday());
+			record.setExperience(request.getExprice());
+			record.setFax(request.getUserfax());
+			record.setHobby(request.getHobby());
+			record.setManagerId(request.getUid());
+			record.setMobilePhone(request.getMobile());
+			record.setPhone(request.getUserphone());
+			record.setRole(request.getRole());
+			record.setUserDesc(request.getNote());
+			record.setUserEmail(request.getUseremail());
+			record.setUserName(request.getUserName());
+			record.setUserSex(request.getUserSex());
+			record.setWechat(request.getWechat());
+			sysManagerSupplierUserMapper.updateByPrimaryKey(record);
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("联系人更新失败！", e);
 			resp.setRcode(ReturnCode.CODE_199999);
 			resp.setRmsg(ReturnCode.INFO_199999);
 		}

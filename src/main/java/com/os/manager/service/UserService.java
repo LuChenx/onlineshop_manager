@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.os.manager.request.AddSupplierUserRequest;
 import com.os.manager.request.AddUserRequest;
+import com.os.manager.request.DeleteSupplierUserRequest;
 import com.os.manager.request.DeleteUserRequest;
 import com.os.manager.request.SupplierUserRequest;
+import com.os.manager.request.UpdateSupplierUserRequest;
 import com.os.manager.request.UpdateUserBaseInfoRequest;
 import com.os.manager.request.UpdateUserRequest;
 import com.os.manager.request.UserAuthRequest;
@@ -101,4 +103,18 @@ public interface UserService
 	 * @return
 	 */
 	BaseResp addSupplierUser(AddSupplierUserRequest request);
+
+	/**
+	 * 删除供货商联系人
+	 * @param request
+	 * @return
+	 */
+	BaseResp deleteSupplierUser(DeleteSupplierUserRequest request);
+
+	/**
+	 * 更新供货商联系人
+	 * @param request
+	 * @return
+	 */
+	BaseResp updateSupplierUser(UpdateSupplierUserRequest request);
 }

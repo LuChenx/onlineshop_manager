@@ -21,11 +21,13 @@ import com.os.manager.dbmodel.SysConfigSettingType;
 import com.os.manager.dbmodel.SysConfigSettingTypeExample;
 import com.os.manager.request.AddSystemOptionRequest;
 import com.os.manager.request.DeleteOptionRequest;
+import com.os.manager.request.SystemConfigRequest;
 import com.os.manager.request.SystemOptionRequest;
 import com.os.manager.request.UpdateSystemConfigRequest;
 import com.os.manager.request.UpdateSystemOptionRequest;
 import com.os.manager.request.base.BaseResq;
 import com.os.manager.request.base.BaseTableRequest;
+import com.os.manager.response.SystemConfigOptionResp;
 import com.os.manager.response.SystemOptionTypeResp;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
@@ -208,6 +210,30 @@ public class SystemConfigServiceImpl implements SystemConfigService
 			record.setId(request.getConfigId());
 			record.setSettingValue(request.getConfigValue());
 			sysConfigSettingMapper.updateByPrimaryKey(record);
+			resp.setRcode(ReturnCode.CODE_000000);
+			resp.setRmsg(ReturnCode.INFO_000000);
+		}
+		catch (Exception e)
+		{
+			logger.error("系统配置查询失败！", e);
+			resp.setRcode(ReturnCode.CODE_199999);
+			resp.setRmsg(ReturnCode.INFO_199999);
+		}
+		return resp;
+	}
+
+	@ Override
+	public SystemConfigOptionResp querySystemConfig(SystemConfigRequest request)
+	{
+		SystemConfigOptionResp resp = new SystemConfigOptionResp();
+		try
+		{
+			SysConfigSettingOptionExample example = new SysConfigSettingOptionExample();
+			Criteria criteria = example.createCriteria();
+			criteria.andSettingTypeIdEqualTo(request.getConifgType());
+			example.setOrderByClause("show_index asc");
+			List<SysConfigSettingOption> options = sysConfigSettingOptionMapper.selectByExample(example);
+			resp.setOptions(options);
 			resp.setRcode(ReturnCode.CODE_000000);
 			resp.setRmsg(ReturnCode.INFO_000000);
 		}

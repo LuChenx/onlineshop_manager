@@ -171,6 +171,23 @@
       #{companyEmail,jdbcType=VARCHAR}, #{isRebate,jdbcType=BIT}, #{companyDesc,jdbcType=VARCHAR}, 
       #{managerId,jdbcType=VARCHAR})
   </insert>
+  
+   <insert id="insertList">
+    insert into sys_manager_supplier (
+      company_name, company_address, zip_code, 
+      company_phone, company_fax, duty_paragraph, 
+      opening_bank, company_account, company_website, 
+      company_email, is_rebate, company_desc, 
+      manager_id)values
+    <foreach collection ="list" item="result" separator =",">
+      (#{result.companyName,jdbcType=VARCHAR}, #{result.companyAddress,jdbcType=VARCHAR}, #{result.zipCode,jdbcType=VARCHAR}, 
+	      #{result.companyPhone,jdbcType=VARCHAR}, #{result.companyFax,jdbcType=VARCHAR}, #{result.dutyParagraph,jdbcType=VARCHAR}, 
+	      #{result.openingBank,jdbcType=VARCHAR}, #{result.companyAccount,jdbcType=VARCHAR}, #{result.companyWebsite,jdbcType=VARCHAR}, 
+	      #{result.companyEmail,jdbcType=VARCHAR}, #{result.isRebate,jdbcType=BIT}, #{result.companyDesc,jdbcType=VARCHAR}, 
+	      #{result.managerId,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  
   <insert id="insertSelective" parameterType="com.os.manager.dbmodel.SysManagerSupplier">
     <!--
       WARNING - @mbg.generated
@@ -441,8 +458,8 @@
       This element was generated on Fri Jan 11 16:03:09 CST 2019.
     -->
     update sys_manager_supplier
-    set create_time = #{createTime,jdbcType=TIMESTAMP},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+    set 
+      modified_time = NOW(),
       company_name = #{companyName,jdbcType=VARCHAR},
       company_address = #{companyAddress,jdbcType=VARCHAR},
       zip_code = #{zipCode,jdbcType=VARCHAR},
