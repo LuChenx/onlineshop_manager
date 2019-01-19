@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.os.manager.aspect.ControllerLogger;
 import com.os.manager.request.AddSystemOptionRequest;
 import com.os.manager.request.DeleteOptionRequest;
+import com.os.manager.request.SystemConfigRequest;
 import com.os.manager.request.SystemOptionRequest;
 import com.os.manager.request.UpdateSystemConfigRequest;
 import com.os.manager.request.UpdateSystemOptionRequest;
 import com.os.manager.request.base.BaseResq;
 import com.os.manager.request.base.BaseTableRequest;
+import com.os.manager.response.SystemConfigOptionResp;
 import com.os.manager.response.SystemOptionTypeResp;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
@@ -132,5 +134,20 @@ public class SystemController
 		BindingResult result)
 	{
 		return systemConfigService.updateSystemConfig(request);
+	}
+
+	/**
+	 * 
+	 * @Title: querySystemConfig @Description:
+	 *         TODO(查询某类型系统选项) @param: @param request @param: @param
+	 *         result @param: @return @return:
+	 *         SystemConfigOptionResp @throws
+	 */
+	@ ControllerLogger
+	@ RequestMapping ("/querySystemConfig")
+	public SystemConfigOptionResp querySystemConfig(@ Validated @ RequestBody SystemConfigRequest request ,
+		BindingResult result)
+	{
+		return systemConfigService.querySystemConfig(request);
 	}
 }

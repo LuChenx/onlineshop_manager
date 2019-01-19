@@ -3,11 +3,13 @@ package com.os.manager.service;
 
 import com.os.manager.request.AddSystemOptionRequest;
 import com.os.manager.request.DeleteOptionRequest;
+import com.os.manager.request.SystemConfigRequest;
 import com.os.manager.request.SystemOptionRequest;
 import com.os.manager.request.UpdateSystemConfigRequest;
 import com.os.manager.request.UpdateSystemOptionRequest;
 import com.os.manager.request.base.BaseResq;
 import com.os.manager.request.base.BaseTableRequest;
+import com.os.manager.response.SystemConfigOptionResp;
 import com.os.manager.response.SystemOptionTypeResp;
 import com.os.manager.response.TableDataResp;
 import com.os.manager.response.base.BaseResp;
@@ -72,4 +74,10 @@ public interface SystemConfigService
 	 * @return
 	 */
 	BaseResp updateSystemConfig(UpdateSystemConfigRequest request);
+
+	/**
+	 * @param request
+	 * @return
+	 */
+	SystemConfigOptionResp querySystemConfig(SystemConfigRequest request);
 }

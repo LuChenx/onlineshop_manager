@@ -466,8 +466,8 @@
       This element was generated on Tue Jan 15 14:26:42 CST 2019.
     -->
     update sys_manager_supplier_user
-    set create_time = #{createTime,jdbcType=TIMESTAMP},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+    set 
+      modified_time = NOW(),
       manager_id = #{managerId,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
       user_sex = #{userSex,jdbcType=INTEGER},
@@ -481,7 +481,6 @@
       user_email = #{userEmail,jdbcType=VARCHAR},
       experience = #{experience,jdbcType=VARCHAR},
       hobby = #{hobby,jdbcType=VARCHAR},
-      supplier_id = #{supplierId,jdbcType=BIGINT},
       user_desc = #{userDesc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
